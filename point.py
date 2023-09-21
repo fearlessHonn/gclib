@@ -4,7 +4,7 @@ import re
 class Point:
     def __init__(self, latitude, longitude, text: str = ''):
         if type(latitude) == str:
-            if re.match(r'(N|S)\s*\d{1,2,3}\s*°?\s*\d{1,2}\s*\.\s*\d+', latitude):
+            if re.match(r'(N|S)\s*\d{1,3}\s*°?\s*\d{1,2}\s*\.\s*\d+', latitude):
                 self.latitude = self.single_conv_decimal(latitude)
             else:
                 raise TypeError('Latitude does not match required format.')
@@ -17,7 +17,7 @@ class Point:
             raise TypeError('Please provide the latitude as string or float.')
 
         if type(longitude) == str:
-            if re.match(r'(E|W)\s*\d{1,2,3}\s*°?\s*\d{1,2}\s*\.\s*\d+', longitude):
+            if re.match(r'(E|W)\s*\d{1,3}\s*°?\s*\d{1,2}\s*\.\s*\d+', longitude):
                 self.longitude = self.single_conv_decimal(longitude)
             else:
                 raise TypeError('Longitude does not match required format.')
@@ -55,7 +55,7 @@ class Point:
         degrees, minutes, decimals = re.findall(r'\d+', coordinate)
         decimal_coordinate = int(degrees) + (int(minutes) + int(decimals) * 0.001) / 60
 
-        if 'S' or 'W' in coordinate:
+        if 'S' in coordinate or 'W' in coordinate:
             decimal_coordinate *= -1
 
         return decimal_coordinate
@@ -66,7 +66,3 @@ class Point:
         decimal_longitude = Point.single_conv_decimal(longitude)
 
         return decimal_latitude, decimal_longitude
-
-
-p = Point(49.123847, 8.23148432)
-print(p)
